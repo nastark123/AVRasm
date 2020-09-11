@@ -20,34 +20,53 @@ ldi r16, $0C
 out DDRB, r16
 
 init_display:
+    ldi r23, 10
+    rcall delay10ms
+
     ldi selectReg, $00 ; all of the control lines are 0 for this
     ldi dataReg, $38   ; this command sets the display to 2 line mode with a 5-8 character font
     
     out PORTB, selectReg ; write the command to the LCD
     out PORTD, dataReg
 
+    ldi r23, 1
+    rcall delay10ms
+
     ldi dataReg, $0E ; turn on the display and cursor, control lines are unchanged so we don't need to modify the register
 
     out PORTD, dataReg
+
+    ldi r23, 1
+    rcall delay10ms
 
     ldi dataReg, $06 ; sets the display to move the character right after each character is written
 
     out PORTD, dataReg
 
+    ldi r23, 1
+    rcall delay10ms
+
+    ldi dataReg, $01 ; should clear the display
+
+    out PORTD, dataReg
+
+    ldi r23, 1
+    rcall delay10ms
+
     ldi charReg, $48 ; capital H
-    rjmp write_char
+    rcall write_char
 
     ldi charReg, $65 ; lower case e
-    rjmp write_char
+    rcall write_char
 
     ldi charReg, $6C ; lower case l
-    rjmp write_char
+    rcall write_char
 
     ldi charReg, $6C ; lower case l
-    rjmp write_char
+    rcall write_char
 
     ldi charReg, $6F ; lower case o
-    rjmp write_char
+    rcall write_char
 
 infinite_loop:
     nop
@@ -60,8 +79,8 @@ write_char:
     out DDRB, selectReg
     out DDRD, dataReg
 
-    ldi r23, $01
-    rjmp delay10ms
+    ldi r23, 1
+    rcall delay10ms
 
     ret
 
